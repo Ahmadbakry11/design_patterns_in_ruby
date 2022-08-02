@@ -196,9 +196,70 @@ end
 def change_resistant_for_each_element(array)
   copy = Array.new(array)
   i = 0
-  
+
   while i < copy.length
     yield(copy[i])
     i += 1
   end
 end
+
+#=============================================
+
+# Some notes from the Head First Design Pattern Book and GO4 book:
+#------------------
+
+# The GO4 representation:
+
+# 1- We need to define an abstract Iteratable interface or class.This represents what is called Enumerable
+#    in some oop languages.
+
+# 2- We need to define an abstract class or interface called Iterator which represents the iterator we build 
+#    to iterate through the iteratable.This represents what is called Enumerator
+#    in some oop languages.
+
+
+# 3- the Iteratable interface needs to have an abstract method called get_iterator()
+#    which returns an Iterator
+
+# 4- And, we will have ConcreateIteratable classes inheriting from or implementing the Iteratable interface 
+#    with a concreate implementation for the get_iterator() method depending on the iteratable structure.
+
+# 5- And also, we need to have ConcreateIterator classes that inherit from the abstract Iterator depending 
+#    on the iteratable structure
+
+# 6- The reason for having get_iterator() abstract method in the Iteratable class or interface is that
+#    we need to treat our ConcreateIteratable classes uniformly depending on how we iterate through the structure
+#    array, linkedlist, tree, account for example. 
+   
+# 7- In fact, the get_iterator method or idea is an instance of the factory method pattern .
+#    The ConcreateIteratable, implements a method get_iterator which creates a ConcreateIterator instance.
+#    The Iteratable is a factory that constructs Iteraots
+
+# 8- The Iterator super class needs to have the following methods.
+
+#    * has_next?(): which returns a boolean depending on whether we reached the end of the iteratable or not.
+
+#    * next(): a void method that does not return any thing but mutates the state of the iterator.
+#       i.e. points to the next element in the structure.
+#       It is better to avoid mutation by making the method next returning a new version of itself
+#       pointing to the next element.
+#       Make th copy carry the new informaton or the new state.
+#    * current() or item(): which returns the item we need and it is of type Item for example if we have
+#       a collection or an enumerable of items.
+
+#    * In some cases like above we merge those two methods next() and current() in one method
+#      So, in one request get the item and increment the pointer to the next item in the collection.
+#      But this is a violation for waht is called Command Query Separator principle which states that:
+
+#      "Separate methods that perform queries from methods that excute commands"
+
+#      Imagine that you hae a DB query which asking for something from the DB and at the same time 
+#      it updates another DB record or changes the state of the DB.That is super confusing.
+#      for more details: https://martinfowler.com/bliki/CommandQuerySeparation.html
+
+#      There is another example for that violation: poppinf from the stack.
+
+# 9- As a summary, concreate iteratble produces a concreate iterator.It is a relationship betwena concreate 
+#    iteratable and a concreate iterator
+
+            
