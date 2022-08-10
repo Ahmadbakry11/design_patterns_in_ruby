@@ -302,6 +302,36 @@ end
 # the deed. When you use this pattern, you are no longer simply saying, “Do this”;
 # instead, you are saying, “Remember how to do this,” and, sometime later, “Do that
 # thing that I told you to remember.” "
+# ----------------------------------------------------------------------------------------
+
+# Command Pattern in the wild:
+# =============================
+
+# 1- Active Record Migrations:
+# ==============================
+
+# ActiveRecord comes equipped with a classic example of an undo-able Command
+# pattern implementation in the form of its migration facility.
+
+# The beauty of migrations lies in the fact that you can step your database schema 
+# forward or backward in time by either doing (up-ing?) or undoing (down-ing?) the migrations.
+
+class CreateBookTable < ActiveRecord::Migration
+  def self.up             #Command excute
+    create_table :books do |t|
+      t.column :title, :string
+      t.column :author, :string
+    end
+  end
+
+  def self.down    #Command unexcute
+    drop_table :books
+  end
+end
+
+
+Pending:
+We need to read about Madeleine and Marshal and how they use the command pattern.
 
 
 
